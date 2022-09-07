@@ -1,11 +1,48 @@
+import '@reach/dialog/styles.css'
 import * as React from 'react'
 import {createRoot} from 'react-dom/client'
+import {Dialog} from '@reach/dialog'
 import {Logo} from './components/logo'
-import '@reach/dialog/styles.css'
-import Dialog from '@reach/dialog'
+
+function Loginform ({onSubmit, buttonText}) {
+    function handleSubmit(event) {
+        event.preventDefault()
+        const {username, password} = event.target.elements
+    
+        onSubmit({
+          username: username.value,
+          password: password.value,
+        })
+      }
+
+    return(
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="usernameInput">Username:</label>
+          <input id="usernameInput" type="text" />
+          </div>
+          <div>
+            <label htmlFor="passwordInput">Password:</label>
+            <input id="passwordInput" type="password" />
+            </div>
+            <button type="submit">{buttonText}</button>
+            </form>
+            </div>
+            )
+          }
+
 
 function App() {
-    const [openModal, setOpenModal] = React.useState('none')
+  const [openModal, setOpenModal] = React.useState('none')
+
+  function login(formData) {
+    console.log('login', formData)
+  }
+
+  function register(formData) {
+    console.log('register', formData)
+  }
 
   return (
     <div>
@@ -17,17 +54,19 @@ function App() {
       <div>
         <button onClick={() => setOpenModal('register')}>Register</button>
       </div>
-      <Dialog isOpen={openModal === 'login'}>
+      <Dialog aria-label="Login form" isOpen={openModal === 'login'}>
         <div>
           <button onClick={() => setOpenModal('none')}>Close</button>
         </div>
         <h3>Login</h3>
+        <Loginform onSubmit={login} buttonText="Login" />
       </Dialog>
-      <Dialog isOpen={openModal === 'register'}>
+      <Dialog aria-label="Registration form" isOpen={openModal === 'register'}>
         <div>
           <button onClick={() => setOpenModal('none')}>Close</button>
         </div>
         <h3>Register</h3>
+        <Loginform onSubmit={register} buttonText="Register" />
       </Dialog>
     </div>
   )
